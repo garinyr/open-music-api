@@ -28,11 +28,11 @@ exports.up = (pgm) => {
       type: 'INT',
       notNull: true,
     },
-    inserted_at: {
+    insertedAt: {
       type: 'TEXT',
       notNull: true,
     },
-    updated_at: {
+    updatedAt: {
       type: 'TEXT',
       notNull: true,
     },

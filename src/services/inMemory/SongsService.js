@@ -9,17 +9,19 @@ class SongsService {
 
   addSong({ title, year, performer, genre, duration }) {
     const id = nanoid(16);
-    const createdAt = new Date().toISOString();
-    const updatedAt = createdAt;
+    const insertedAt = new Date().toISOString();
+    const updatedAt = insertedAt;
+    const tahun = parseInt(year);
+    const durasi = parseInt(duration);
 
     const newSong = {
       id,
       title,
-      year,
+      year: tahun,
       performer,
       genre,
-      duration,
-      createdAt,
+      duration: durasi,
+      insertedAt,
       updatedAt,
     };
 
@@ -35,8 +37,16 @@ class SongsService {
   }
 
   getSongs() {
-    console.log(this._songs);
-    return this._songs;
+    for (const [key, value] of Object.entries(this._songs)) {
+      const song = [
+        {
+          id: value.id,
+          title: value.title,
+          performer: value.performer,
+        },
+      ];
+      return song;
+    }
   }
 
   getSongById(id) {
@@ -55,14 +65,16 @@ class SongsService {
     }
 
     const updatedAt = new Date().toISOString();
+    const tahun = parseInt(year);
+    const durasi = parseInt(duration);
 
     this._songs[index] = {
       ...this._songs[index],
       title,
-      year,
+      year: tahun,
       performer,
       genre,
-      duration,
+      duration: durasi,
       updatedAt,
     };
   }
