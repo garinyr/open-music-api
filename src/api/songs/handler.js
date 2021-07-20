@@ -83,7 +83,6 @@ class SongsHandler {
       console.error(error);
       return response;
     }
-    }
   }
 
   async getSongByIdHandler(request, h) {
