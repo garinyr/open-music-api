@@ -3,11 +3,11 @@ const ClientError = require('../../exceptions/ClientError');
  * UsersHandler
 */
 class UsersHandler {
-  /**
-     * initialize constructor
-     * @param {string} service for service
-     * @param {string} validator for validate data
-    */
+/**
+  *
+  * @param {*} service
+  * @param {*} validator
+  */
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
@@ -16,11 +16,10 @@ class UsersHandler {
   }
 
   /**
-     * POST /users
-     * @param {string} request request data
-     * @param {string} h ??
-     * @return {response}
-    */
+   * @param {string} request
+   * @param {string} h
+   * @return {string} response
+   */
   async postUserHandler(request, h) {
     try {
       this._validator.validateUserPayload(request.payload);
@@ -59,10 +58,10 @@ class UsersHandler {
   }
 
   /**
-     * GET /users
-     * @param {string} request request data
-     * @param {string} h ??
-    */
+   * @param {string} request
+   * @param {string} h
+   * @return {string} response
+   */
   async getUserByIdHandler(request, h) {
     try {
       const {id} = request.params;

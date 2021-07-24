@@ -1,6 +1,13 @@
 const ClientError = require('../../exceptions/ClientError');
 
+/**
+ * SongsHandler
+ */
 class SongsHandler {
+  /**
+   * @param {string} service
+   * @param {string} validator
+   */
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
@@ -12,10 +19,15 @@ class SongsHandler {
     this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
   }
 
+  /**
+   * @param {string} request
+   * @param {string} h
+   * @return {string} response
+   */
   async postSongHandler(request, h) {
     try {
       this._validator.validateSongPayload(request.payload);
-      const { title, year, performer, genre, duration } = request.payload;
+      const {title, year, performer, genre, duration} = request.payload;
 
       const songId = await this._service.addSong({
         title,
@@ -55,6 +67,9 @@ class SongsHandler {
     }
   }
 
+  /**
+   * @return {string} response
+   */
   async getSongsHandler() {
     try {
       const songs = await this._service.getSongs();
@@ -85,6 +100,11 @@ class SongsHandler {
     }
   }
 
+  /**
+   * @param {string} request
+   * @param {string} h
+   * @return {string} response
+   */
   async getSongByIdHandler(request, h) {
     try {
       const id = request.params['songId'];
@@ -116,10 +136,15 @@ class SongsHandler {
     }
   }
 
+  /**
+   * @param {string} request
+   * @param {string} h
+   * @return {string} response
+   */
   async putSongByIdHandler(request, h) {
     try {
       this._validator.validateSongPayload(request.payload);
-      const { title, year, performer, genre, duration } = request.payload;
+      const {title, year, performer, genre, duration} = request.payload;
       const id = request.params['songId'];
 
       await this._service.editSongById(id, {
@@ -155,6 +180,11 @@ class SongsHandler {
     }
   }
 
+  /**
+   * @param {string} request
+   * @param {string} h
+   * @return {string} response
+   */
   async deleteSongByIdHandler(request, h) {
     try {
       const id = request.params['songId'];
