@@ -23,7 +23,6 @@ require('./services/postgres/AuthenticationsService');
 const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentications');
 
-
 // playlists
 const playlists = require('./api/playlists');
 const PlaylistsService = require('./services/postgres/PlaylistsService');
@@ -126,7 +125,6 @@ const init = async () => {
       options: {
         service: playlistsService,
         validator: PlaylistsValidator,
-        usersService,
       },
     },
   ]);

@@ -12,7 +12,7 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       notNull: true,
     },
-    username: {
+    owner: {
       type: 'VARCHAR(50)',
       notNull: true,
     },
@@ -24,8 +24,8 @@ exports.up = (pgm) => {
   */
   pgm.addConstraint(
       'playlists',
-      'fk_playlists.username_users.id',
-      'FOREIGN KEY(username) REFERENCES users(id) ON DELETE CASCADE',
+      'fk_playlists.owner_users.id',
+      'FOREIGN KEY(owner) REFERENCES users(id) ON DELETE CASCADE',
   );
 };
 
