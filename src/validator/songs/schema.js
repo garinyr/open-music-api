@@ -8,4 +8,4 @@ const SongPayloadSchema = Joi.object({
   duration: Joi.number(),
 });
 
-module.exports = { SongPayloadSchema };
+module.exports = {SongPayloadSchema};

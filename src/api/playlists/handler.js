@@ -60,6 +60,7 @@ class PlaylistsHandler {
         message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
+      console.error(error);
       return response;
     }
   }
@@ -95,6 +96,7 @@ class PlaylistsHandler {
         message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
+      console.error(error);
       return response;
     }
   }
@@ -131,6 +133,7 @@ class PlaylistsHandler {
         message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
+      console.error(error);
       return response;
     }
   }
@@ -148,7 +151,7 @@ class PlaylistsHandler {
       const {id: credentialId} = request.auth.credentials;
       this._validator.validatePlaylistSongPayload(request.payload);
 
-      await this._service.verifyPlaylistOwner(playlistId, credentialId);
+      await this._service.verifyPlaylistAccess(playlistId, credentialId);
       await this._service.addPlaylistsong({playlistId, songId});
 
       const response = h.response({
@@ -173,6 +176,7 @@ class PlaylistsHandler {
         message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
+      console.error(error);
       return response;
     }
   }
@@ -187,7 +191,7 @@ class PlaylistsHandler {
       const {playlistId} = request.params;
       const {id: credentialId} = request.auth.credentials;
 
-      await this._service.verifyPlaylistOwner(playlistId, credentialId);
+      await this._service.verifyPlaylistAccess(playlistId, credentialId);
       const songs = await this._service.getPlaylistSongs(playlistId);
       return {
         status: 'success',
@@ -211,6 +215,7 @@ class PlaylistsHandler {
         message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
+      console.error(error);
       return response;
     }
   }
@@ -226,7 +231,7 @@ class PlaylistsHandler {
       const {songId} = request.payload;
       const {id: credentialId} = request.auth.credentials;
 
-      await this._service.verifyPlaylistOwner(playlistId, credentialId);
+      await this._service.verifyPlaylistAccess(playlistId, credentialId);
       await this._service.deletePlaylistSongs(playlistId, songId);
       return {
         status: 'success',
@@ -248,6 +253,7 @@ class PlaylistsHandler {
         message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
+      console.error(error);
       return response;
     }
   }
