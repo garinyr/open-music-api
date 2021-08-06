@@ -17,4 +17,4 @@ const mapDBToModel = ({
   insertedAt,
   updatedAt,
 });
-module.exports = { mapDBToModel };
+module.exports = {mapDBToModel};

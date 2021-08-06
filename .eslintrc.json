@@ -9,9 +9,6 @@
     "ecmaVersion": 12
   },
   "rules": {
-    "no-console": "off",
-    "require-jsdoc": "off",
-    "object-curly-spacing": "off",
-    "max-len": "off"
+    "no-console": "off"
   }
 }
