@@ -68,7 +68,7 @@ class PlaylistsService {
     };
 
     const result = await this._pool.query(query);
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError('Playlist gagal dihapus. '+
        'Id tidak ditemukan');
     }
@@ -89,7 +89,7 @@ class PlaylistsService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new InvariantError('Lagu gagal ditambahkan ke playlist');
     }
 
@@ -110,7 +110,7 @@ class PlaylistsService {
     const result = await this._pool.query(query);
 
     // error
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
     }
 
@@ -129,7 +129,7 @@ class PlaylistsService {
     };
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new InvariantError('Lagu gagal dihapus dari playlist, '+
       'Id tidak ditemukan');
     }
@@ -146,7 +146,7 @@ class PlaylistsService {
       values: [playlistId],
     };
     const result = await this._pool.query(query);
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new NotFoundError('Playlist tidak ditemukan');
     }
     const playlist = result.rows[0];
