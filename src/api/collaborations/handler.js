@@ -1,4 +1,3 @@
-const ClientError = require('../../exceptions/ClientError');
 
 /**
  * CollaborationsHandler

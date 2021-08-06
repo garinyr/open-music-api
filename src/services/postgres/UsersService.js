@@ -65,7 +65,6 @@ class UsersService {
    * @return {string} result.rows[0].
   */
   async getUserById(userId) {
-    console.log('userId >> '+userId);
     const query = {
       text: 'SELECT id, username, fullname FROM users WHERE id = $1',
       values: [userId],

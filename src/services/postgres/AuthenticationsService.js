@@ -30,14 +30,12 @@ class AuthenticationsService {
     * @param {string} token token
   */
   async verifyRefreshToken(token) {
-    console.log('verifyRefreshToken >>> '+ token);
     const query = {
       text: 'SELECT token FROM authentications WHERE token = $1',
       values: [token],
     };
 
     const result = await this._pool.query(query);
-    console.log(result);
     if (!result.rowCount) {
       throw new InvariantError('Refresh token tidak valid');
     }

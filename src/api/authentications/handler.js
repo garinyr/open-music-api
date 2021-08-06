@@ -1,5 +1,3 @@
-const ClientError = require('../../exceptions/ClientError');
-
 
 /**
  * AuthenticationsHandler
@@ -60,11 +58,9 @@ class AuthenticationsHandler {
   async putAuthenticationHandler(request, h) {
     this._validator.validatePutAuthenticationPayload(request.payload);
     const refreshToken = request.payload.refreshToken;
-    console.log('refreshToken >>> '+refreshToken);
 
     await this._authenticationsService.verifyRefreshToken(refreshToken);
     const {id} = this._tokenManager.verifyRefreshToken(refreshToken);
-    console.log('id >>>'+id);
 
     const accessToken = this._tokenManager.generateAccessToken({id});
     return {

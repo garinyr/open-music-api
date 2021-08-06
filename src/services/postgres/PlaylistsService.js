@@ -140,7 +140,6 @@ class PlaylistsService {
    * @param {*} owner
    */
   async verifyPlaylistOwner(playlistId, owner) {
-    console.log('verifyPlaylistOwner');
     const query = {
       text: 'SELECT * FROM playlists WHERE id = $1',
       values: [playlistId],
@@ -150,7 +149,6 @@ class PlaylistsService {
       throw new NotFoundError('Playlist tidak ditemukan');
     }
     const playlist = result.rows[0];
-    console.log('playlist.owner !== owner >> '+ playlist.owner !== owner);
     if (playlist.owner !== owner) {
       throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
     }
@@ -168,8 +166,6 @@ class PlaylistsService {
         throw error;
       }
       try {
-        console.log('verifyPlaylistAccess');
-        console.log('verifyCollaborator');
         await
         this._collaborationService.verifyCollaborator(playlistId, userId);
       } catch {
