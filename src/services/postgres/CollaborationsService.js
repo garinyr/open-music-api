@@ -7,10 +7,12 @@ const InvariantError = require('../../exceptions/InvariantError');
  */
 class CollaborationsService {
   /**
- * constructor
- */
-  constructor() {
+  * constructor
+  * @param {*} cacheService
+  */
+  constructor(cacheService) {
     this._pool = new Pool();
+    this._cacheService = cacheService;
   }
 
   /**
@@ -51,6 +53,8 @@ class CollaborationsService {
     if (!result.rowCount) {
       throw new InvariantError('Kolaborasi gagal dihapus');
     }
+
+    this._cacheService.delete(`playlists:${userId}`);
   }
 
   /**

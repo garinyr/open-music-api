@@ -38,6 +38,8 @@ class PlaylistsService {
       throw new InvariantError('Playlist gagal ditambahkan');
     }
 
+    this._cacheService.delete(`playlists:${owner}`);
+
     return result.rows[0].id;
   }
 
@@ -46,16 +48,29 @@ class PlaylistsService {
    * @return {string} response
    */
   async getPlaylists(owner) {
-    const query = {
-      text: `SELECT playlists.id, playlists.name, users.username FROM playlists
-      LEFT JOIN users ON users.id = playlists.owner
-      LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id
-      WHERE playlists.owner = $1 OR collaborations.user_id = $1`,
-      values: [owner],
-    };
-    const result = await this._pool.query(query);
+    try {
+      const result = await this._cacheService.get(`playlists:${owner}`);
+      if (result) {
+        console.log(result);
+        return JSON.parse(result);
+      }
+    } catch (error) {
+      const query = {
+        text: `
+        SELECT playlists.id, playlists.name, users.username FROM playlists
+        LEFT JOIN users ON users.id = playlists.owner
+        LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id
+        WHERE playlists.owner = $1 OR collaborations.user_id = $1`,
+        values: [owner],
+      };
+      const result = await this._pool.query(query);
 
-    return result.rows;
+      await
+      this._cacheService.set(`playlists:${owner}`,
+          JSON.stringify(result.rows));
+
+      return result.rows;
+    }
   }
 
   /**
@@ -74,6 +89,9 @@ class PlaylistsService {
       throw new NotFoundError('Playlist gagal dihapus. '+
        'Id tidak ditemukan');
     }
+
+
+    this._cacheService.delete(`playlists:${credentialId}`);
   }
 
   /**
@@ -82,14 +100,17 @@ class PlaylistsService {
    * @return {*} result
    */
   async addPlaylistsong({playlistId, songId}) {
+    console.log('addPlaylistsong');
     const id = `playlist-song-${nanoid(16)}`;
 
     const query = {
       text: 'INSERT INTO playlistsongs VALUES($1, $2, $3) RETURNING id',
       values: [id, playlistId, songId],
     };
+    console.log(query);
 
     const result = await this._pool.query(query);
+    console.log(result);
 
     if (!result.rowCount) {
       throw new InvariantError('Lagu gagal ditambahkan ke playlist');
