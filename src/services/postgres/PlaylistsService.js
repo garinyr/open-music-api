@@ -11,10 +11,12 @@ class PlaylistsService {
   /**
  * constructor
  * @param {string} collaborationService
+ * @param {string} cacheService
  */
-  constructor(collaborationService) {
+  constructor(collaborationService, cacheService) {
     this._pool = new Pool();
     this._collaborationService = collaborationService;
+    this._cacheService = cacheService;
   }
 
   /**
@@ -93,6 +95,7 @@ class PlaylistsService {
       throw new InvariantError('Lagu gagal ditambahkan ke playlist');
     }
 
+    this._cacheService.delete(`playlistSongs:${playlistId}`);
     return result.rows[0].id;
   }
 
@@ -101,20 +104,29 @@ class PlaylistsService {
    * @return {string} response
    */
   async getPlaylistSongs(playlistId) {
-    const query = {
-      text: `SELECT songs.id, songs.title, songs.performer FROM playlistsongs
-      LEFT JOIN songs ON songs.id = playlistsongs.song_id
-      WHERE playlistsongs.playlist_id = $1`,
-      values: [playlistId],
-    };
-    const result = await this._pool.query(query);
+    try {
+      const result =
+      await this._cacheService.get(`playlistSongs:${playlistId}`);
 
-    // error
-    if (!result.rowCount) {
-      throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
+      return JSON.parse(result);
+    } catch (error) {
+      const query = {
+        text: `SELECT songs.id, songs.title, songs.performer FROM playlistsongs
+        LEFT JOIN songs ON songs.id = playlistsongs.song_id
+        WHERE playlistsongs.playlist_id = $1`,
+        values: [playlistId],
+      };
+      const result = await this._pool.query(query);
+
+      // error
+      if (!result.rowCount) {
+        throw new
+        AuthorizationError('Anda tidak berhak mengakses resource ini');
+      }
+      await this._cacheService.set(`playlistSongs:${playlistId}`,
+          JSON.stringify(result.rows));
+      return result.rows;
     }
-
-    return result.rows;
   }
 
   /**
@@ -133,6 +145,7 @@ class PlaylistsService {
       throw new InvariantError('Lagu gagal dihapus dari playlist, '+
       'Id tidak ditemukan');
     }
+    this._cacheService.delete(`playlistSongs:${playlistId}`);
   }
 
   /**

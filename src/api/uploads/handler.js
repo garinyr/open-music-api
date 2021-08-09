@@ -31,10 +31,6 @@ class UploadsHandler {
 
     const filename = await this._service.writeFile(data, data.hapi);
 
-    console.log('filename');
-    console.log(filename);
-
-
     const response = h.response({
       status: 'success',
       data: {
@@ -51,13 +47,9 @@ class UploadsHandler {
    * @return {*}
    */
   async getUploadImageHandler(request, h) {
-    console.log('getUploadImageHandler');
-    console.log(request.params);
     const {filename} = request.params;
     const filepath =
     path.resolve(__dirname, '../../uploads/file/pictures', filename);
-    console.log('filepath');
-    console.log(filepath);
     return h.file(filepath);
   }
 }
